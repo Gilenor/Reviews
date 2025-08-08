@@ -57,8 +57,8 @@ def start(self):
 
 Пример:
 ```python
-def is_user_want_play(message, answers=["Y", "N"]):
-	answer = input(self, message)
+def is_user_want_play(self, message, answers=["Y", "N"]):
+	answer = input(message)
 	
 	while answer not in answers:
 		print("Incorrect option, try again!")
@@ -68,7 +68,7 @@ def is_user_want_play(message, answers=["Y", "N"]):
 
 def start(self):
 	play_game = self.is_user_want_play("Welcome to game! If you want to play press Y, if not press N: ")
-	while :
+	while play_game:
 		self.word = Word()
 		self.player = Player()
 		...
