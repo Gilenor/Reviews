@@ -162,5 +162,5 @@ class HangmanUI:
 Но я бы еще раз настоятельно рекомендовал, попробовать переписать это в процедурном стиле, а уже потом в ООП.
 
 P.S. отдельное спасибо за 🌵 в файлике со словами)
-[good job](https://kartinkof.club/uploads/posts/2022-04/1649591828_3-kartinkof-club-p-ugarnie-kartinki-i-anime-4.jpg)
+![good job](https://kartinkof.club/uploads/posts/2022-04/1649591828_3-kartinkof-club-p-ugarnie-kartinki-i-anime-4.jpg)
 
