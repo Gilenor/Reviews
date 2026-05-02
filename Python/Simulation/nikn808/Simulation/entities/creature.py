@@ -11,9 +11,8 @@ from pathfinding.pathfinder import PathFinder
 
 class Creature(Entity, Destroyable):
     """Базовый класс для всех живых существ"""
-    
+
     def __init__(self, config: CreatureConfig) -> None:
-        self._config = config
         self._max_hp = config.max_hp
         self._hp = config.hp
         self._max_satiety = config.max_satiety
@@ -81,57 +80,47 @@ class Creature(Entity, Destroyable):
         """Ход существа"""
         if not self.is_alive:
             return
-        if self._try_interact(game_map, current_pos): 
-            return
 
-        self._make_move(game_map, current_pos) 
-        new_pos = game_map.get_position(self)
-        
-        if new_pos is not None:
-            self._try_interact(game_map, new_pos)
+        path = PathFinder.get_path(
+            game_map, current_pos, self.is_target, self.is_passable)
 
-    def _find_nearby_target(self, game_map: GameMap, pos: Coordinate) -> Optional[Coordinate]:
-        """Поиск ближайшей цели"""
-        for neighbor in game_map.get_neighbors(pos):
-            entity = game_map.get_entity(neighbor)
-            if entity is not None and self.is_target(entity):
-                return neighbor
-                
-        return None
-
-    def _make_move(self, game_map: GameMap, current_pos: Coordinate) -> None:
-        """Осуществление перемещения существа"""
-        path = PathFinder.get_path(game_map, current_pos, self.is_target, self.is_passable)
-        
         if not path:
             return
 
-        steps = path[:self._speed]
-        
+        if self._speed < len(path):
+            path = path[:self._speed]
+
+        self._make_move(game_map, current_pos, path)
+
+        if len(path) <= self._speed:
+            target_pos = path[-1]
+
+            self._try_interact(game_map, target_pos)
+
+    def _make_move(self, game_map: GameMap, current_pos: Coordinate, path: list[Coordinate]) -> None:
+        """Осуществление перемещения существа"""
+
+        steps = path
+
         last_valid_step = current_pos
         for step in steps:
             target_entity = game_map.get_entity(step)
-            
+
             if self.is_passable(target_entity):
                 last_valid_step = step
             else:
                 break
-                
+
         if last_valid_step != current_pos:
             game_map.move_entity(current_pos, last_valid_step)
 
-    def _try_interact(self, game_map: GameMap, current_pos: Coordinate) -> bool:
+    def _try_interact(self, game_map: GameMap, target_pos: Coordinate) -> None:
         """Попытка взаимодействия с целью"""
-        target_pos = self._find_nearby_target(game_map, current_pos)
 
-        if target_pos is not None:
-            target_entity = game_map.get_entity(target_pos)
-            
-            if target_entity is not None:
-                is_destroyed = self.interact(target_entity)
-                #if is_destroyed:
-                    #game_map.remove_entity(target_pos)
-                    #game_map.move_entity(current_pos, target_pos)
-                return True
-                
-        return False
+        if target_pos is None:
+            return
+
+        target_entity = game_map.get_entity(target_pos)
+
+        if target_entity is not None:
+            self.interact(target_entity)
