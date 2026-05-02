@@ -61,8 +61,8 @@ class SimulationFactory:
  
         turn_actions = [
             HungerAction(),
-            ClearDeadAction(),
             MoveAction(),
+            ClearDeadAction(),
             ReproduceAction(Herbivore, cfg.herbivore_reproduce_chance, config=herbivore_config),
             ReproduceAction(Predator, cfg.predator_reproduce_chance, config=predator_config),
             GrassGrowAction(Grass, cfg.grass_spawn_per_turn),
