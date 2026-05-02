@@ -8,11 +8,11 @@ from entities.static_objects import Grass
 
 class Herbivore(Creature):
     """Травоядное"""
-    
+
     def __init__(self, config: HerbivoreConfig) -> None:
         super().__init__(config)
         self._satiety_from_grass = config.satiety_from_grass
-    
+
     def is_target(self, entity: Entity) -> bool:
         return isinstance(entity, Grass)
 
@@ -21,6 +21,7 @@ class Herbivore(Creature):
 
     def interact(self, target: Entity) -> bool:
         if isinstance(target, Grass):
+            target.take_damage()
             self.restore_satiety(self._satiety_from_grass)
             return True
         return False

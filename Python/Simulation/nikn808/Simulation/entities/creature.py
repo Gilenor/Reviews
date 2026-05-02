@@ -1,14 +1,15 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from typing import Optional
 
 from entities.entity import Entity
+from entities.destroyable import Destroyable
 from entities.creatureconfig import CreatureConfig
 from world.game_map import GameMap
 from world.coordinates import Coordinate
 from pathfinding.pathfinder import PathFinder
 
 
-class Creature(Entity, ABC):
+class Creature(Entity, Destroyable):
     """Базовый класс для всех живых существ"""
     
     def __init__(self, config: CreatureConfig) -> None:
