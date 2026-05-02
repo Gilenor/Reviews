@@ -1,7 +1,7 @@
 from collections import deque
 from typing import Callable, Optional
 
-from world.coordinates import Coordinates
+from world.coordinates import Coordinate
 from world.game_map import GameMap
 from entities.entity import Entity
 
@@ -12,14 +12,14 @@ class PathFinder:
     @staticmethod
     def get_path(
         game_map: GameMap,
-        start_pos: Coordinates,
+        start_pos: Coordinate,
         is_target_func: Callable[[Entity], bool],
         is_passable_func: Callable[[Optional[Entity]], bool]
-    ) -> Optional[list[Coordinates]]:
+    ) -> Optional[list[Coordinate]]:
         """Ищет кратчайший путь от start_pos до ближайшей цели"""
         
         queue = deque([start_pos])
-        came_from: dict[Coordinates, Optional[Coordinates]] = {start_pos: None}
+        came_from: dict[Coordinate, Optional[Coordinate]] = {start_pos: None}
 
         while queue:
             current = queue.popleft()
@@ -42,10 +42,10 @@ class PathFinder:
 
     @staticmethod
     def _reconstruct_path(
-        came_from: dict[Coordinates, Optional[Coordinates]], 
-        start: Coordinates, 
-        goal: Coordinates
-    ) -> list[Coordinates]:
+        came_from: dict[Coordinate, Optional[Coordinate]], 
+        start: Coordinate, 
+        goal: Coordinate
+    ) -> list[Coordinate]:
         """Восстанавливает путь от цели к старту"""
         path = []
         current = goal

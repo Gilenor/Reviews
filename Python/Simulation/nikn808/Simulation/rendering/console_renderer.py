@@ -1,7 +1,7 @@
 import os
 from rendering.base import Renderer
 from world.game_map import GameMap
-from world.coordinates import Coordinates
+from world.coordinates import Coordinate
 
 class ConsoleRenderer(Renderer):
     """Отвечает за вывод состояния карты в консоль"""
@@ -23,7 +23,7 @@ class ConsoleRenderer(Renderer):
         for y in range(game_map.height):
             row_symbols = []
             for x in range(game_map.width):
-                entity = game_map.get_entity(Coordinates(x, y))
+                entity = game_map.get_entity(Coordinate(x, y))
                 if entity is None:
                     row_symbols.append(self._empty_cell_sprite)
                 else:

@@ -4,7 +4,7 @@ from typing import Optional
 from entities.entity import Entity
 from entities.creatureconfig import CreatureConfig
 from world.game_map import GameMap
-from world.coordinates import Coordinates
+from world.coordinates import Coordinate
 from pathfinding.pathfinder import PathFinder
 
 
@@ -76,7 +76,7 @@ class Creature(Entity, ABC):
         """Взаимодействие с целью"""
         pass
 
-    def take_turn(self, game_map: GameMap, current_pos: Coordinates) -> None:
+    def take_turn(self, game_map: GameMap, current_pos: Coordinate) -> None:
         """Ход существа"""
         if not self.is_alive:
             return
@@ -89,7 +89,7 @@ class Creature(Entity, ABC):
         if new_pos is not None:
             self._try_interact(game_map, new_pos)
 
-    def _find_nearby_target(self, game_map: GameMap, pos: Coordinates) -> Optional[Coordinates]:
+    def _find_nearby_target(self, game_map: GameMap, pos: Coordinate) -> Optional[Coordinate]:
         """Поиск ближайшей цели"""
         for neighbor in game_map.get_neighbors(pos):
             entity = game_map.get_entity(neighbor)
@@ -98,7 +98,7 @@ class Creature(Entity, ABC):
                 
         return None
 
-    def _make_move(self, game_map: GameMap, current_pos: Coordinates) -> None:
+    def _make_move(self, game_map: GameMap, current_pos: Coordinate) -> None:
         """Осуществление перемещения существа"""
         path = PathFinder.get_path(game_map, current_pos, self.is_target, self.is_passable)
         
@@ -119,7 +119,7 @@ class Creature(Entity, ABC):
         if last_valid_step != current_pos:
             game_map.move_entity(current_pos, last_valid_step)
 
-    def _try_interact(self, game_map: GameMap, current_pos: Coordinates) -> bool:
+    def _try_interact(self, game_map: GameMap, current_pos: Coordinate) -> bool:
         """Попытка взаимодействия с целью"""
         target_pos = self._find_nearby_target(game_map, current_pos)
 
@@ -128,8 +128,8 @@ class Creature(Entity, ABC):
             
             if target_entity is not None:
                 is_destroyed = self.interact(target_entity)
-                if is_destroyed:
-                    game_map.remove_entity(target_pos)
+                #if is_destroyed:
+                    #game_map.remove_entity(target_pos)
                     #game_map.move_entity(current_pos, target_pos)
                 return True
                 
